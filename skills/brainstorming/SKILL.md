@@ -24,12 +24,13 @@ You MUST create a task for each of these items and complete them in order:
 1. **Explore project context** — check files, docs, recent commits
 2. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-4. **Propose 2-3 approaches** — with trade-offs and your recommendation
-5. **Present design** — in sections scaled to their complexity, get user approval after each section
-6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
-7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-8. **User reviews written spec** — ask user to review the spec file before proceeding
-9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
+4. **Run bounded behavior grill** — pressure-test user behavior, architecture boundaries, examples, reject signals, invariants, and feedback/correction paths without over-questioning
+5. **Propose 2-3 approaches** — with trade-offs and your recommendation
+6. **Present design** — in sections scaled to their complexity, get user approval after each section
+7. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
+8. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope, and Behavior Evaluation (see below)
+9. **User reviews written spec** — ask user to review the spec file before proceeding
+10. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
 ## Process Flow
 
@@ -39,6 +40,7 @@ digraph brainstorming {
     "Visual questions ahead?" [shape=diamond];
     "Offer Visual Companion\n(own message, no other content)" [shape=box];
     "Ask clarifying questions" [shape=box];
+    "Bounded behavior grill" [shape=box];
     "Propose 2-3 approaches" [shape=box];
     "Present design sections" [shape=box];
     "User approves design?" [shape=diamond];
@@ -51,7 +53,8 @@ digraph brainstorming {
     "Visual questions ahead?" -> "Offer Visual Companion\n(own message, no other content)" [label="yes"];
     "Visual questions ahead?" -> "Ask clarifying questions" [label="no"];
     "Offer Visual Companion\n(own message, no other content)" -> "Ask clarifying questions";
-    "Ask clarifying questions" -> "Propose 2-3 approaches";
+    "Ask clarifying questions" -> "Bounded behavior grill";
+    "Bounded behavior grill" -> "Propose 2-3 approaches";
     "Propose 2-3 approaches" -> "Present design sections";
     "Present design sections" -> "User approves design?";
     "User approves design?" -> "Present design sections" [label="no, revise"];
@@ -79,6 +82,13 @@ digraph brainstorming {
 
 **Exploring approaches:**
 
+- Run a bounded behavior grill before settling on approaches:
+  - Identify the concrete examples that expose the intended behavior
+  - Ask only questions that would change the design route, behavior boundary, reject signal, invariant, or feedback/correction path
+  - Prefer answering from code, docs, existing conventions, or references instead of asking the user
+  - Stay at user behavior and architecture-boundary level before drilling into implementation details
+  - Do not keep grilling until every technical detail is known; some issues should surface during execution and flow back into the design or plan
+
 - Propose 2-3 different approaches with trade-offs
 - Present options conversationally with your recommendation and reasoning
 - Lead with your recommended option and explain why
@@ -89,6 +99,14 @@ digraph brainstorming {
 - Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
 - Ask after each section whether it looks right so far
 - Cover: architecture, components, data flow, error handling, testing
+- Include a Behavior Evaluation section for non-trivial behavior changes:
+  - User intent
+  - Concrete examples
+  - Accept scenarios
+  - Reject scenarios
+  - Invariants
+  - Observable evidence / oracle
+  - Correction path if evidence fails
 - Be ready to go back and clarify if something doesn't make sense
 
 **Design for isolation and clarity:**
@@ -120,6 +138,7 @@ After writing the spec document, look at it with fresh eyes:
 2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
 3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
 4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+5. **Behavior evaluation check:** For non-trivial behavior changes, can a reviewer identify concrete examples, reject scenarios, invariants, observable evidence/oracle, and correction paths? If not, add them before planning.
 
 Fix any issues inline. No need to re-review — just fix and move on.
 

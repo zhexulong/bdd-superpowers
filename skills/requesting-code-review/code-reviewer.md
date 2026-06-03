@@ -51,6 +51,9 @@ git diff {BASE_SHA}..{HEAD_SHA}
 **Requirements:**
 - All plan requirements met?
 - Implementation matches spec?
+- If the plan includes Behavior Pipeline Harness, declared behavior checkpoints still have observable evidence, reject signals, and correction paths?
+- Any task marked `preserves INV-N` actually preserves the invariant?
+- Any task marked `technical-only` avoided inventing user behavior and still has appropriate TDD, regression, or static verification?
 - No scope creep?
 - Breaking changes documented?
 
