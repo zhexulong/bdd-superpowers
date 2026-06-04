@@ -9,7 +9,7 @@ description: Use when encountering any bug, test failure, or unexpected behavior
 
 Random fixes waste time and create new bugs. Quick patches mask underlying issues.
 
-**Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
+**Core principle:** ALWAYS find root cause before attempting fixes, and always ask whether the local root cause is evidence of a deeper structural problem. Symptom fixes are failure.
 
 **Violating the letter of this process is violating the spirit of debugging.**
 
@@ -20,6 +20,12 @@ NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
 ```
 
 If you haven't completed Phase 1, you cannot propose fixes.
+
+Finding a local root cause is not enough. Before fixing, decide whether the bug is:
+- **Local defect:** one bounded implementation mistake with clear ownership and no repeated pattern
+- **Structural signal:** evidence that the current design, boundary, state model, API contract, ownership split, or workflow is wrong or underspecified
+
+If it is a structural signal, do not hide it behind a local patch. Name the deeper issue and discuss the architectural correction with your human partner before implementing a narrow fix that would preserve the wrong shape.
 
 ## When to Use
 
@@ -119,6 +125,25 @@ You MUST complete each phase before proceeding to the next.
    - Keep tracing up until you find the source
    - Fix at source, not at symptom
 
+6. **Classify Structural Signal**
+
+   **BEFORE moving to pattern analysis, ask what the root cause implies about the system:**
+
+   Structural signals include:
+   - Same failure shape appears in multiple modules, tests, prompts, or generated artifacts
+   - The bug comes from unclear ownership: two components both think they own truth, routing, state, formatting, or policy
+   - The fix would require adding another wrapper, special case, compatibility path, or hidden side channel
+   - The behavior only works when a human remembers an implicit rule that is not encoded in the design, tests, or contracts
+   - The failure exposes mismatch between the intended workflow and the actual loaded tool/skill/plugin/config source
+   - The local root cause is "wrong source loaded", "wrong authority used", "accidental default", or "duplicate control surface"
+
+   If any signal is present, write the structural hypothesis explicitly:
+   - "Local root cause: X"
+   - "Deeper structural concern: Y"
+   - "Evidence that this is broader than one bug: Z"
+
+   Then decide whether a local fix is still valid. A local fix is valid only if it removes the structural cause or is an explicitly temporary containment with a follow-up architecture decision.
+
 ### Phase 2: Pattern Analysis
 
 **Find the pattern before fixing:**
@@ -142,6 +167,14 @@ You MUST complete each phase before proceeding to the next.
    - What settings, config, environment?
    - What assumptions does it make?
 
+5. **Check For Boundary/Ownership Mismatch**
+   - Does the working example rely on a different owner of truth, policy, route, or state?
+   - Is the broken path using a convenience surface as an authority surface?
+   - Are multiple mechanisms doing the same job with different precedence?
+   - Would copying the working example reinforce the wrong architecture?
+
+If this check finds a boundary or ownership mismatch, stop treating the issue as a simple bug. Update the hypothesis to include the structural concern before testing any fix.
+
 ### Phase 3: Hypothesis and Testing
 
 **Scientific method:**
@@ -150,6 +183,7 @@ You MUST complete each phase before proceeding to the next.
    - State clearly: "I think X is the root cause because Y"
    - Write it down
    - Be specific, not vague
+   - Include whether this is a local defect or structural signal
 
 2. **Test Minimally**
    - Make the SMALLEST possible change to test hypothesis
@@ -183,6 +217,7 @@ You MUST complete each phase before proceeding to the next.
    - ONE change at a time
    - No "while I'm here" improvements
    - No bundled refactoring
+   - If a structural signal was identified, the fix must either address the structural cause or be labeled as temporary containment with explicit follow-up
 
 3. **Verify Fix**
    - Test passes now?

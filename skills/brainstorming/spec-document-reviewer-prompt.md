@@ -28,7 +28,7 @@ Task tool (general-purpose):
 
     ## Behavior Evaluation Guidance
 
-    A behavior checkpoint is an acceptance scenario or concrete example turned into a reviewable control point. It is not a task, module boundary, milestone, or approval gate.
+    A behavior scenario is an acceptance scenario or concrete example turned into a reviewable control point. It is not a task, module boundary, milestone, or approval gate.
 
     For specs that change behavior someone relies on, verify the spec answers:
     - What concrete example exposes the intended behavior?

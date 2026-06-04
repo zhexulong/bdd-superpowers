@@ -60,39 +60,39 @@ This structure informs the task decomposition. Each task should produce self-con
 ---
 ```
 
-## Behavior Pipeline Harness
+## Behavior Coverage
 
 If the spec includes Behavior Evaluation, add this section after the header and before the task list. This is a horizontal behavior-control surface for the whole plan, not a field to copy into every implementation task.
 
 ```markdown
-## Behavior Pipeline Harness
+## Behavior Coverage
 
-### Behavior Checkpoints
+### Scenarios
 
-| Checkpoint | Example / scenario | Observable evidence | Oracle | Reject signal | Correction path |
+| Scenario | Example | Observable evidence | Expected result | Failure signal | If it fails |
 | --- | --- | --- | --- | --- | --- |
-| BDD-1 | Concrete example from the spec | What a test or human can observe | How to judge alignment | What proves drift | Return to spec, plan, implementation, or human decision |
+| Scenario 1 | Concrete example from the spec | What a test or human can observe | How to judge alignment | What proves drift | Return to spec, plan, implementation, or human decision |
 
 ### Automation / Observation / Correction
 
-| Checkpoint | Automated check | Human observation | Failure response |
+| Scenario | Automated check | Human observation | Failure response |
 | --- | --- | --- | --- |
-| BDD-1 | Test, command, integration check, or none | What the human reviews if not fully automated | What to revisit if this fails |
+| Scenario 1 | Test, command, integration check, or none | What the human reviews if not fully automated | What to revisit if this fails |
 
 ### Cross-Task Invariants
 
-- INV-1: Invariant from the spec that must remain true across tasks.
+- Invariant 1: Invariant from the spec that must remain true across tasks.
 ```
 
-A behavior checkpoint is an acceptance scenario or concrete example turned into a reviewable control point. It is not a task, module boundary, milestone, or approval gate.
+A behavior scenario is an acceptance scenario or concrete example turned into a reviewable control point. It is not a task, module boundary, milestone, or approval gate.
 
-Do not require every task to have a BDD scenario. A task only gets a BDD relationship if it connects to a behavior checkpoint or invariant:
+Do not require every task to have a behavior scenario. A task only gets a behavior coverage line if it connects to a scenario or invariant:
 
 ```markdown
-**BDD relationship:** implements BDD-1 | observes BDD-1 | corrects BDD-1 | preserves INV-1 | technical-only
+**Behavior coverage:** implements Scenario 1 | observes Scenario 1 | corrects Scenario 1 | preserves Invariant 1 | technical-only
 ```
 
-Use `technical-only` when the task has no direct connection to a behavior checkpoint or invariant. Technical-only tasks still follow TDD, regression testing, or static verification as appropriate.
+Use `technical-only` when the task has no direct connection to a behavior scenario or invariant. Technical-only tasks still follow TDD, regression testing, or static verification as appropriate.
 
 ## Task Structure
 
@@ -104,8 +104,8 @@ Use `technical-only` when the task has no direct connection to a behavior checkp
 - Modify: `exact/path/to/existing.py:123-145`
 - Test: `tests/exact/path/to/test.py`
 
-**BDD relationship:** implements BDD-1 | observes BDD-1 | corrects BDD-1 | preserves INV-1 | technical-only
-(Only include this line when the plan has a Behavior Pipeline Harness.)
+**Behavior coverage:** implements Scenario 1 | observes Scenario 1 | corrects Scenario 1 | preserves Invariant 1 | technical-only
+(Only include this line when the plan has Behavior Coverage.)
 
 - [ ] **Step 1: Write the failing test**
 
@@ -162,7 +162,7 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
 
-**2. Behavior pipeline coverage:** If the spec includes Behavior Evaluation, does the plan include behavior checkpoints, observable evidence/oracles, reject signals, correction paths, and any cross-task invariants? Do tasks only reference BDD when they connect to a checkpoint or invariant?
+**2. Behavior coverage:** If the spec includes Behavior Evaluation, does the plan include behavior scenarios, observable evidence/oracles, failure signals, correction paths, and any cross-task invariants? Do tasks only reference behavior coverage when they connect to a scenario or invariant?
 
 **3. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
 
