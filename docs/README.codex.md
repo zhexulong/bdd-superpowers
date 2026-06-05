@@ -1,13 +1,21 @@
-# Superpowers for Codex
+# BDD Superpowers for Codex
 
-Guide for using Superpowers with OpenAI Codex via native skill discovery.
+Guide for using BDD Superpowers with OpenAI Codex via native skill discovery.
+
+BDD Superpowers is a fork of Superpowers. It keeps the original skill workflow and adds Behavior Evaluation in specs plus Behavior Coverage in implementation plans.
 
 ## Quick Install
 
 Tell Codex:
 
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/zhexulong/superpowers/refs/heads/feature/bdd-control-harness/.codex/INSTALL.md
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.codex/INSTALL.md
+
+After the repository is renamed:
+
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/zhexulong/bdd-superpowers/refs/heads/main/.codex/INSTALL.md
 ```
 
 ## Manual Installation
@@ -21,14 +29,21 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/obra/superpowers.git ~/.codex/superpowers
+   git clone --branch feature/bdd-control-harness https://github.com/zhexulong/superpowers.git ~/.codex/bdd-superpowers
+   ```
+
+   After the repository is renamed:
+   ```bash
+   git clone https://github.com/zhexulong/bdd-superpowers.git ~/.codex/bdd-superpowers
    ```
 
 2. Create the skills symlink:
    ```bash
    mkdir -p ~/.agents/skills
-   ln -s ~/.codex/superpowers/skills ~/.agents/skills/superpowers
+   ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
    ```
+
+   The symlink name remains `superpowers` for compatibility.
 
 3. Restart Codex.
 
@@ -40,27 +55,39 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 
 ### Windows
 
-Use a junction instead of a symlink (works without Developer Mode):
+Use a junction instead of a symlink:
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
-cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE\.codex\superpowers\skills"
+cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE\.codex\bdd-superpowers\skills"
 ```
+
+## Migrating from upstream Superpowers
+
+If `~/.agents/skills/superpowers` already points to upstream Superpowers, replace it:
+
+```bash
+rm ~/.agents/skills/superpowers
+ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
+```
+
+Do not expose both upstream Superpowers and BDD Superpowers under skill discovery at the same time.
 
 ## How It Works
 
-Codex has native skill discovery — it scans `~/.agents/skills/` at startup, parses SKILL.md frontmatter, and loads skills on demand. Superpowers skills are made visible through a single symlink:
+Codex has native skill discovery. It scans `~/.agents/skills/` at startup, parses `SKILL.md` frontmatter, and loads skills on demand. BDD Superpowers skills are made visible through a single symlink:
 
-```
-~/.agents/skills/superpowers/ → ~/.codex/superpowers/skills/
+```text
+~/.agents/skills/superpowers/ -> ~/.codex/bdd-superpowers/skills/
 ```
 
-The `using-superpowers` skill is discovered automatically and enforces skill usage discipline — no additional configuration needed.
+The `using-superpowers` skill is discovered automatically and enforces skill usage discipline. No additional bootstrap is needed.
 
 ## Usage
 
 Skills are discovered automatically. Codex activates them when:
-- You mention a skill by name (e.g., "use brainstorming")
+
+- You mention a skill by name, such as "use brainstorming"
 - The task matches a skill's description
 - The `using-superpowers` skill directs Codex to use one
 
@@ -85,12 +112,12 @@ description: Use when [condition] - [what it does]
 [Your skill content here]
 ```
 
-The `description` field is how Codex decides when to activate a skill automatically — write it as a clear trigger condition.
+The `description` field is how Codex decides when to activate a skill automatically. Write it as a clear trigger condition.
 
 ## Updating
 
 ```bash
-cd ~/.codex/superpowers && git pull
+cd ~/.codex/bdd-superpowers && git pull
 ```
 
 Skills update instantly through the symlink.
@@ -106,15 +133,21 @@ rm ~/.agents/skills/superpowers
 Remove-Item "$env:USERPROFILE\.agents\skills\superpowers"
 ```
 
-Optionally delete the clone: `rm -rf ~/.codex/superpowers` (Windows: `Remove-Item -Recurse -Force "$env:USERPROFILE\.codex\superpowers"`).
+Optionally delete the clone: `rm -rf ~/.codex/bdd-superpowers`.
 
 ## Troubleshooting
 
 ### Skills not showing up
 
 1. Verify the symlink: `ls -la ~/.agents/skills/superpowers`
-2. Check skills exist: `ls ~/.codex/superpowers/skills`
-3. Restart Codex — skills are discovered at startup
+2. Check skills exist: `ls ~/.codex/bdd-superpowers/skills`
+3. Restart Codex; skills are discovered at startup
+
+### Installed upstream by mistake
+
+1. Check whether `~/.agents/skills/superpowers` points to `obra/superpowers`
+2. Replace the symlink with the BDD Superpowers path above
+3. Restart Codex
 
 ### Windows junction issues
 
@@ -122,5 +155,6 @@ Junctions normally work without special permissions. If creation fails, try runn
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Main documentation: https://github.com/obra/superpowers
+- This fork: https://github.com/zhexulong/superpowers/tree/feature/bdd-control-harness
+- Planned renamed repository: https://github.com/zhexulong/bdd-superpowers
+- Upstream Superpowers: https://github.com/obra/superpowers

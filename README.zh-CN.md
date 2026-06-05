@@ -1,0 +1,190 @@
+# BDD Superpowers
+
+[English](README.md)
+
+BDD Superpowers 是 [Superpowers](https://github.com/obra/superpowers) 的 fork。它保留 Superpowers 原本的 skills-first 软件开发工作流，并在设计和计划链路里加入行为评估。
+
+基础工作流仍然是 Superpowers：brainstorm 设计，写 spec，写 implementation plan，用 TDD 实现，review，verification。变化在于：非平凡行为改动现在会在纵向 implementation slice 之外，增加一条横向 behavior/control harness。
+
+更具体地说：TDD 继续检查局部实现是否正确；Behavior Evaluation 和 Behavior Coverage 检查整条流程是否仍然在做用户真正想要的行为。这个能力在代码已经大到人不会逐行阅读、接近黑盒时尤其重要。
+
+这不是官方 Superpowers 发行版。它是一个 Superpowers-derived fork，重点是 BDD-style 行为审查、pipeline 级约束，以及 design-plan-code 的对齐。
+
+## 它如何工作
+
+起点和 Superpowers 一样。当你让 coding agent 做一个东西时，它不应该直接开始写代码，而是先用 brainstorming skill 理解你真正想做什么，探索方案，并把对话收敛成一份可审查的设计。
+
+BDD Superpowers 在这一步加入 bounded behavior grill。agent 会压力测试具体例子、行为边界、failure signals、invariants 和 correction paths，但不会把会话变成几个小时的穷尽式问卷。能从代码、文档、已有约定中回答的问题，它应该自己查；只有答案会改变设计路线时才问用户。
+
+设计写出来后，spec 可以包含 `Behavior Evaluation` 章节。这个章节不是 implementation plan，也不是方案解释。它说明哪些行为必须可观察，预期结果是什么，哪些信号说明系统偏离了，哪些 invariant 必须横跨流程成立，以及证据失败时应该回到哪里修正。
+
+设计批准后，writing-plans skill 仍然生成 Superpowers 风格的 implementation plan：具体任务、文件路径、测试和验证步骤。如果 spec 包含 Behavior Evaluation，plan 还会增加 `Behavior Coverage`：把场景和 invariant 横向映射到 implementation tasks 和验证证据。纯技术任务仍然可以是 `technical-only`；目标不是强迫每个局部 slice 都伪造 BDD。
+
+最后，code review 不只看局部测试是否通过，还会检查一种常见风险：实现细节都对，但行为 pipeline 错了、不完整，或者不再绑定用户想要的结果。
+
+## 相较上游 Superpowers 的优化
+
+- **Brainstorming 增加 bounded behavior grill**：在设计定稿前做针对性压力测试，避免一次性问几十个低价值问题。
+- **Spec 增加 Behavior Evaluation**：为非平凡行为改动记录 concrete examples、expected results、failure signals、invariants、observable evidence 和 correction paths。
+- **Plan 增加 Behavior Coverage**：把 spec 中的行为场景映射到计划任务和验证证据，同时允许无关技术任务保持 `technical-only`。
+- **Design document self-review 增强**：spec reviewer 会检查行为证据缺失、failure signal 模糊、invariant 太弱、correction path 不清楚等问题。
+- **Plan document review 增强**：plan reviewer 会拒绝假的 per-task behavior coverage，并检查横向场景是否真的贯穿到计划。
+- **Code review 增强**：review prompt 会检查 flow-level drift，也就是局部测试通过但用户意图或 pipeline 没有被保住的情况。
+
+## 安装
+
+不同平台安装方式不同。关键规则是：安装这个 fork，不要安装官方 Superpowers marketplace 包。
+
+GitHub 仓库重命名前，使用当前 fork URL：
+
+```text
+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness
+```
+
+仓库重命名后，使用：
+
+```text
+https://github.com/zhexulong/bdd-superpowers.git
+```
+
+内部 skill namespace 目前仍保留为 `superpowers:*`，以兼容已有 agent 和配置。
+
+### OpenCode
+
+在你的 `opencode.json` 的 `plugin` 数组中加入 BDD Superpowers：
+
+```json
+{
+  "plugin": ["superpowers@git+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness"]
+}
+```
+
+仓库重命名后改成：
+
+```json
+{
+  "plugin": ["superpowers@git+https://github.com/zhexulong/bdd-superpowers.git"]
+}
+```
+
+重启 OpenCode。插件会自动安装并注册所有 skills。
+
+验证方式：问它 “Tell me about your superpowers”，并检查 brainstorming 是否提到 `Behavior Evaluation` 或 `Behavior Coverage`。
+
+如果你之前安装了官方 Superpowers，替换旧 plugin entry。不要同时启用官方 Superpowers 和 BDD Superpowers，因为它们暴露相同的 skill names。
+
+### OpenAI Codex CLI
+
+clone 这个 fork，并把 skills 目录 symlink 到 Codex native skill discovery：
+
+```bash
+git clone --branch feature/bdd-control-harness https://github.com/zhexulong/superpowers.git ~/.codex/bdd-superpowers
+mkdir -p ~/.agents/skills
+ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
+```
+
+仓库重命名后：
+
+```bash
+git clone https://github.com/zhexulong/bdd-superpowers.git ~/.codex/bdd-superpowers
+mkdir -p ~/.agents/skills
+ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
+```
+
+安装后重启 Codex。更新：
+
+```bash
+cd ~/.codex/bdd-superpowers && git pull
+```
+
+如果 `~/.agents/skills/superpowers` 已经指向官方 Superpowers，替换这个 symlink，让它指向本 fork。
+
+### Claude Code、Cursor、Copilot 和 Gemini
+
+官方 marketplaces 安装的是上游 Superpowers，不是这个 fork。如果你要使用 BDD Superpowers，暂时不要使用官方 marketplace entry。
+
+平台支持 git-based install 时，使用本 fork 的 git URL；否则 clone 本仓库，并通过平台的本地 skill/plugin 机制暴露 `skills/` 目录。同一时间只保留一个 `superpowers` skill namespace provider。
+
+## 基础工作流
+
+1. **brainstorming** - 写代码前触发。通过问题澄清想法，探索方案，分段展示设计，并在非平凡行为改动上运行 bounded behavior grill。
+
+2. **Behavior Evaluation** - 写在 design/spec 中。定义 concrete examples、expected results、failure signals、invariants、observable evidence 和 correction paths。
+
+3. **using-git-worktrees** - 设计批准后触发。创建隔离工作区，运行项目 setup，确认干净的测试基线。
+
+4. **writing-plans** - 基于批准后的设计生成 implementation plan。任务包含文件路径、测试和验证步骤；如果 spec 有 Behavior Evaluation，则增加 Behavior Coverage。
+
+5. **subagent-driven-development** 或 **executing-plans** - 基于 plan 执行。按任务派发 subagent 或分批执行并审查。
+
+6. **test-driven-development** - 实现阶段触发。对局部实现工作执行 RED-GREEN-REFACTOR。
+
+7. **requesting-code-review** - 按 plan 和 behavior coverage 做 review，按严重程度报告问题。关键问题阻断继续推进。
+
+8. **finishing-a-development-branch** - 任务完成后触发。验证测试，给出集成选项，并清理 worktree。
+
+agent 会在任何任务前检查相关 skills。这是强制 workflow，不是建议。
+
+## 里面有什么
+
+### Skills Library
+
+**Testing**
+- **test-driven-development** - RED-GREEN-REFACTOR cycle。
+
+**Debugging**
+- **systematic-debugging** - 4 阶段 root cause process。
+- **verification-before-completion** - 在声明完成前确认工作真的被验证。
+
+**Collaboration**
+- **brainstorming** - Socratic design refinement 加 bounded behavior grill。
+- **writing-plans** - 详细 implementation plans；适用时增加 Behavior Coverage。
+- **executing-plans** - 带检查点的批量执行。
+- **dispatching-parallel-agents** - 并发 subagent workflows。
+- **requesting-code-review** - 带 behavior drift 检查的 review checklist。
+- **receiving-code-review** - 以技术严谨性处理反馈。
+- **using-git-worktrees** - 并行开发分支。
+- **finishing-a-development-branch** - merge/PR 决策流程。
+- **subagent-driven-development** - 带两阶段 review 的快速迭代。
+
+**Meta**
+- **writing-skills** - 按 Superpowers 方法创建和测试新 skills。
+- **using-superpowers** - skills system 的入口说明。
+
+## Eval 状态
+
+当前证据范围是有意收窄的：
+
+- 对齐后的 design/spec eval 在本 fork 上通过，在上游 `origin/main` 上因为缺少 behavior-evaluation 要求而失败。
+- mutation 和 real-document replay checks 没有证明广泛优越性；它们更适合作为 non-regression 和诊断检查。
+- 当前可支持的 claim 不是“全面优于 Superpowers”。可支持的 claim 是：这个 fork 增加了上游 Superpowers 当前没有强制执行的、可审查的 behavior/control harness 要求。
+
+## Philosophy
+
+- **先继承 Superpowers** - 这个 fork 扩展原 workflow，而不是替换它。
+- **行为优先于文档体积** - BDD-style Markdown 的目标是让意图行为可审查，不是写更长的 spec。
+- **横向反馈 + 纵向反馈** - TDD 检查局部实现；Behavior Coverage 检查整条流程是否仍绑定用户意图。
+- **证据优先于声明** - Spec 和 plan 应该写清 observable evidence 和 failure signals。
+- **人类终审** - Design review 可以过滤弱设计，但最终批准仍归人类。
+
+## Lineage
+
+BDD Superpowers fork 自 [obra/superpowers](https://github.com/obra/superpowers)，原项目由 Jesse Vincent 和 Prime Radiant 社区创建。
+
+本 fork 保持 MIT license。详见 [LICENSE](LICENSE)。
+
+## Contributing
+
+沿用 Superpowers 自身的纪律：
+
+1. Fork 仓库。
+2. 为你的工作创建 branch。
+3. 修改 skill 时使用 `writing-skills` skill。
+4. 改变行为指导时，增加或更新 eval coverage。
+5. 提交 PR，并清楚说明行为影响。
+
+## Community and Issues
+
+- 上游 Superpowers: https://github.com/obra/superpowers
+- 当前 fork: https://github.com/zhexulong/superpowers/tree/feature/bdd-control-harness
+- 计划重命名后的仓库: https://github.com/zhexulong/bdd-superpowers

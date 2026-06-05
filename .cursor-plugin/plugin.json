@@ -1,18 +1,20 @@
 {
   "name": "superpowers",
-  "displayName": "Superpowers",
-  "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques",
+  "displayName": "BDD Superpowers",
+  "description": "Superpowers fork with TDD, design review, Behavior Evaluation, and Behavior Coverage",
   "version": "5.0.7",
   "author": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
   },
-  "homepage": "https://github.com/obra/superpowers",
-  "repository": "https://github.com/obra/superpowers",
+  "homepage": "https://github.com/zhexulong/bdd-superpowers",
+  "repository": "https://github.com/zhexulong/bdd-superpowers",
   "license": "MIT",
   "keywords": [
     "skills",
     "tdd",
+    "bdd",
+    "behavior-evaluation",
     "debugging",
     "collaboration",
     "best-practices",

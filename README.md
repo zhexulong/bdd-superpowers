@@ -1,198 +1,190 @@
-# Superpowers
+# BDD Superpowers
 
-Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
+[简体中文](README.zh-CN.md)
+
+BDD Superpowers is a fork of [Superpowers](https://github.com/obra/superpowers) that keeps the original skills-first software development workflow and adds behavior evaluation to the design and planning path.
+
+The base workflow is still Superpowers: brainstorm the design, write a spec, write an implementation plan, implement with TDD, review, and verify. The change is that non-trivial behavior work now carries a horizontal behavior/control harness alongside the normal vertical implementation slices.
+
+In practical terms: TDD still checks local implementation correctness. Behavior Evaluation and Behavior Coverage check whether the whole flow is still doing what the user wanted, even when the code is too large or too opaque for a human to inspect line by line.
+
+This is not the official Superpowers distribution. It is a Superpowers-derived fork focused on BDD-style behavior review, pipeline-level constraints, and design-plan-code alignment.
 
 ## How it works
 
-It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. 
+It starts the same way Superpowers does. When you ask your coding agent to build something, it should not jump directly into code. It uses the brainstorming skill to understand what you are trying to do, explore alternatives, and turn the conversation into a reviewable design.
 
-Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. 
+BDD Superpowers extends that step with a bounded behavior grill. The agent pressure-tests concrete examples, behavior boundaries, failure signals, invariants, and correction paths without turning the session into hours of exhaustive questioning. It should answer from code, docs, and existing conventions when it can, and ask the user only when the answer would change the design route.
 
-After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
+Once the design is written, the spec can include a `Behavior Evaluation` section. This section is not another implementation plan. It describes what behavior must be observable, what results are expected, what signals mean the system drifted, what invariants must hold across the flow, and where to correct if the evidence fails.
 
-Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for Claude to be able to work autonomously for a couple hours at a time without deviating from the plan you put together.
+After design approval, the writing-plans skill still produces a Superpowers-style implementation plan with concrete tasks, file paths, tests, and verification. When the spec contains Behavior Evaluation, the plan also includes `Behavior Coverage`: a short horizontal mapping from scenarios and invariants to implementation tasks and evidence. Technical-only tasks remain valid; the goal is not to force fake BDD onto every local slice.
 
-There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
+Finally, code review checks more than local test pass/fail. It looks for cases where implementation details are correct but the behavior pipeline is wrong, incomplete, or no longer tied to the user-visible outcome.
 
+## What differs from upstream Superpowers
 
-## Sponsorship
-
-If Superpowers has helped you do stuff that makes money and you are so inclined, I'd greatly appreciate it if you'd consider [sponsoring my opensource work](https://github.com/sponsors/obra).
-
-Thanks! 
-
-- Jesse
-
+- **Bounded behavior grill in brainstorming** - adds targeted pressure-testing before the design is finalized, without asking dozens of low-value questions up front.
+- **Behavior Evaluation in specs** - captures concrete examples, expected results, failure signals, invariants, observable evidence, and correction paths for non-trivial behavior changes.
+- **Behavior Coverage in plans** - connects the spec's behavior scenarios to plan tasks and verification evidence, while allowing unrelated implementation steps to stay `technical-only`.
+- **Design document self-review** - the spec reviewer now checks for missing behavior evidence, ambiguous failure signals, weak invariants, and unclear correction paths.
+- **Plan document review** - the plan reviewer rejects fake per-task behavior coverage and checks whether horizontal scenarios are actually carried through the plan.
+- **Code review reinforcement** - review prompts look for flow-level drift: local tests passing while the intended behavior or pipeline is not actually preserved.
 
 ## Installation
 
-**Note:** Installation differs by platform. 
+Installation differs by platform. The important rule is: install this fork, not the official Superpowers marketplace package.
 
-### Claude Code Official Marketplace
-
-Superpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)
-
-Install the plugin from Anthropic's official marketplace:
-
-```bash
-/plugin install superpowers@claude-plugins-official
-```
-
-### Claude Code (Superpowers Marketplace)
-
-The Superpowers marketplace provides Superpowers and some other related plugins for Claude Code.
-
-In Claude Code, register the marketplace first:
-
-```bash
-/plugin marketplace add obra/superpowers-marketplace
-```
-
-Then install the plugin from this marketplace:
-
-```bash
-/plugin install superpowers@superpowers-marketplace
-```
-
-### OpenAI Codex CLI
-
-- Open plugin search interface
-
-```bash
-/plugins
-```
-
-Search for Superpowers
-
-```bash
-superpowers
-```
-
-Select `Install Plugin`
-
-### OpenAI Codex App
-
-- In the Codex app, click on Plugins in the sidebar.
-- You should see `Superpowers` in the Coding section. 
-- Click the `+` next to Superpowers and follow the prompts.
-
-
-### Cursor (via Plugin Marketplace)
-
-In Cursor Agent chat, install from marketplace:
+Until the GitHub repository is renamed, use the current fork URL:
 
 ```text
-/add-plugin superpowers
+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness
 ```
 
-or search for "superpowers" in the plugin marketplace.
+After the repository is renamed, use:
+
+```text
+https://github.com/zhexulong/bdd-superpowers.git
+```
+
+The internal skill namespace currently remains `superpowers:*` for compatibility with existing agents and configs.
 
 ### OpenCode
 
-Tell OpenCode:
+Add BDD Superpowers to the `plugin` array in your `opencode.json`:
 
+```json
+{
+  "plugin": ["superpowers@git+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness"]
+}
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md
+
+After the repo is renamed, switch to:
+
+```json
+{
+  "plugin": ["superpowers@git+https://github.com/zhexulong/bdd-superpowers.git"]
+}
 ```
 
-**Detailed docs:** [docs/README.opencode.md](docs/README.opencode.md)
+Restart OpenCode. The plugin auto-installs and registers all skills.
 
-### GitHub Copilot CLI
+Verify by asking: "Tell me about your superpowers" and checking that brainstorming mentions `Behavior Evaluation` or `Behavior Coverage`.
+
+If you previously installed official Superpowers, remove or replace the old plugin entry. Do not keep both official Superpowers and BDD Superpowers enabled at the same time; they expose the same skill names.
+
+### OpenAI Codex CLI
+
+Clone this fork and symlink its skills into Codex native skill discovery:
 
 ```bash
-copilot plugin marketplace add obra/superpowers-marketplace
-copilot plugin install superpowers@superpowers-marketplace
+git clone --branch feature/bdd-control-harness https://github.com/zhexulong/superpowers.git ~/.codex/bdd-superpowers
+mkdir -p ~/.agents/skills
+ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
 ```
 
-### Gemini CLI
+After the repo is renamed:
 
 ```bash
-gemini extensions install https://github.com/obra/superpowers
+git clone https://github.com/zhexulong/bdd-superpowers.git ~/.codex/bdd-superpowers
+mkdir -p ~/.agents/skills
+ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
 ```
 
-To update:
+Restart Codex after installing. To update:
 
 ```bash
-gemini extensions update superpowers
+cd ~/.codex/bdd-superpowers && git pull
 ```
+
+If you already have `~/.agents/skills/superpowers` pointing to official Superpowers, replace that symlink so it points to this fork.
+
+### Claude Code, Cursor, Copilot, and Gemini
+
+The official marketplaces install upstream Superpowers, not this fork. For now, do not use the official marketplace entries if you want BDD Superpowers.
+
+Use a git-based install path when the platform supports it, or clone this repository and expose its `skills/` directory through the platform's local skill/plugin mechanism. Keep only one provider for the `superpowers` skill namespace enabled at a time.
 
 ## The Basic Workflow
 
-1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.
+1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation, and runs a bounded behavior grill for non-trivial behavior changes.
 
-2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.
+2. **Behavior Evaluation** - Lives in the design/spec when needed. Defines concrete examples, expected results, failure signals, invariants, observable evidence, and correction paths.
 
-3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.
+3. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on a new branch, runs project setup, verifies clean test baseline.
 
-4. **subagent-driven-development** or **executing-plans** - Activates with plan. Dispatches fresh subagent per task with two-stage review (spec compliance, then code quality), or executes in batches with human checkpoints.
+4. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks with exact file paths, tests, and verification. Adds Behavior Coverage when the spec has Behavior Evaluation.
 
-5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.
+5. **subagent-driven-development** or **executing-plans** - Activates with the plan. Dispatches fresh subagents per task with review, or executes in reviewed batches.
 
-6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.
+6. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR for local implementation work.
 
-7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.
+7. **requesting-code-review** - Reviews against the plan and behavior coverage, reporting issues by severity. Critical issues block progress.
 
-**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
+8. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents integration options, and cleans up worktree.
+
+The agent checks for relevant skills before any task. Mandatory workflows, not suggestions.
 
 ## What's Inside
 
 ### Skills Library
 
 **Testing**
-- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)
+- **test-driven-development** - RED-GREEN-REFACTOR cycle.
 
 **Debugging**
-- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)
-- **verification-before-completion** - Ensure it's actually fixed
+- **systematic-debugging** - 4-phase root cause process.
+- **verification-before-completion** - Ensure work is actually fixed before claiming success.
 
-**Collaboration** 
-- **brainstorming** - Socratic design refinement
-- **writing-plans** - Detailed implementation plans
-- **executing-plans** - Batch execution with checkpoints
-- **dispatching-parallel-agents** - Concurrent subagent workflows
-- **requesting-code-review** - Pre-review checklist
-- **receiving-code-review** - Responding to feedback
-- **using-git-worktrees** - Parallel development branches
-- **finishing-a-development-branch** - Merge/PR decision workflow
-- **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
+**Collaboration**
+- **brainstorming** - Socratic design refinement plus bounded behavior grill.
+- **writing-plans** - Detailed implementation plans plus Behavior Coverage when applicable.
+- **executing-plans** - Batch execution with review points.
+- **dispatching-parallel-agents** - Concurrent subagent workflows.
+- **requesting-code-review** - Pre-review checklist with behavior drift checks.
+- **receiving-code-review** - Responding to feedback with technical rigor.
+- **using-git-worktrees** - Parallel development branches.
+- **finishing-a-development-branch** - Merge/PR decision workflow.
+- **subagent-driven-development** - Fast iteration with two-stage review.
 
 **Meta**
-- **writing-skills** - Create new skills following best practices (includes testing methodology)
-- **using-superpowers** - Introduction to the skills system
+- **writing-skills** - Create and test new skills following the Superpowers methodology.
+- **using-superpowers** - Introduction to the skills system.
+
+## Evaluation Status
+
+Current evidence is intentionally narrow:
+
+- The aligned design/spec eval passes on this fork and fails on upstream `origin/main` for behavior-evaluation requirements.
+- Mutation and real-document replay checks have not proven broad superiority; they are useful as non-regression and diagnostic checks.
+- The supported claim is not "better at everything." The supported claim is that this fork adds reviewable behavior/control harness requirements that upstream Superpowers does not currently enforce.
 
 ## Philosophy
 
-- **Test-Driven Development** - Write tests first, always
-- **Systematic over ad-hoc** - Process over guessing
-- **Complexity reduction** - Simplicity as primary goal
-- **Evidence over claims** - Verify before declaring success
+- **Inherit Superpowers first** - This fork extends the original workflow instead of replacing it.
+- **Behavior over document volume** - The point of BDD-style Markdown is to make intended behavior reviewable, not to write longer specs.
+- **Horizontal plus vertical feedback** - TDD checks local implementation; Behavior Coverage checks whether the flow remains bound to user intent.
+- **Evidence over claims** - Specs and plans should name observable evidence and failure signals.
+- **Human final review** - Design review can filter weak designs, but humans still own final approval.
 
-Read [the original release announcement](https://blog.fsck.com/2025/10/09/superpowers/).
+## Lineage
+
+BDD Superpowers is forked from [obra/superpowers](https://github.com/obra/superpowers), originally built by Jesse Vincent and the Prime Radiant community.
+
+This fork keeps the MIT license. See [LICENSE](LICENSE) for details.
 
 ## Contributing
 
-The general contribution process for Superpowers is below. Keep in mind that we don't generally accept contributions of new skills and that any updates to skills must work across all of the coding agents we support.
+Use the same discipline as Superpowers itself:
 
-1. Fork the repository
-2. Switch to the 'dev' branch
-3. Create a branch for your work
-4. Follow the `writing-skills` skill for creating and testing new and modified skills
-5. Submit a PR, being sure to fill in the pull request template.
+1. Fork the repository.
+2. Create a branch for your work.
+3. Use the `writing-skills` skill for skill changes.
+4. Add or update eval coverage when changing behavior guidance.
+5. Submit a PR with a clear description of the behavior impact.
 
-See `skills/writing-skills/SKILL.md` for the complete guide.
+## Community and Issues
 
-## Updating
-
-Superpowers updates are somewhat coding-agent dependent, but are often automatic.
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Community
-
-Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).
-
-- **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers
-- **Issues**: https://github.com/obra/superpowers/issues
-- **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions
+- Upstream Superpowers: https://github.com/obra/superpowers
+- This fork: https://github.com/zhexulong/superpowers/tree/feature/bdd-control-harness
+- Planned renamed repository: https://github.com/zhexulong/bdd-superpowers

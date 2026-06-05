@@ -1,46 +1,50 @@
-# Installing Superpowers for Codex
+# Installing BDD Superpowers for Codex
 
-Enable superpowers skills in Codex via native skill discovery. Just clone and symlink.
+Enable BDD Superpowers skills in Codex via native skill discovery. Clone this fork and symlink its `skills/` directory.
 
 ## Prerequisites
 
 - Git
+- OpenAI Codex CLI with native skill discovery
 
 ## Installation
 
-1. **Clone the superpowers repository:**
+1. **Clone the BDD Superpowers repository:**
    ```bash
-   git clone https://github.com/obra/superpowers.git ~/.codex/superpowers
+   git clone --branch feature/bdd-control-harness https://github.com/zhexulong/superpowers.git ~/.codex/bdd-superpowers
+   ```
+
+   After the repository is renamed, use:
+   ```bash
+   git clone https://github.com/zhexulong/bdd-superpowers.git ~/.codex/bdd-superpowers
    ```
 
 2. **Create the skills symlink:**
    ```bash
    mkdir -p ~/.agents/skills
-   ln -s ~/.codex/superpowers/skills ~/.agents/skills/superpowers
+   ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
    ```
+
+   The symlink name remains `superpowers` for compatibility with existing skill references.
 
    **Windows (PowerShell):**
    ```powershell
    New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
-   cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE\.codex\superpowers\skills"
+   cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE\.codex\bdd-superpowers\skills"
    ```
 
-3. **Restart Codex** (quit and relaunch the CLI) to discover the skills.
+3. **Restart Codex** to discover the skills.
 
-## Migrating from old bootstrap
+## Migrating from upstream Superpowers
 
-If you installed superpowers before native skill discovery, you need to:
+If `~/.agents/skills/superpowers` already points to upstream Superpowers, replace it so Codex discovers BDD Superpowers instead.
 
-1. **Update the repo:**
-   ```bash
-   cd ~/.codex/superpowers && git pull
-   ```
+```bash
+rm ~/.agents/skills/superpowers
+ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
+```
 
-2. **Create the skills symlink** (step 2 above) — this is the new discovery mechanism.
-
-3. **Remove the old bootstrap block** from `~/.codex/AGENTS.md` — any block referencing `superpowers-codex bootstrap` is no longer needed.
-
-4. **Restart Codex.**
+If you installed the old bootstrap block, remove it from `~/.codex/AGENTS.md`; any block referencing `superpowers-codex bootstrap` is no longer needed.
 
 ## Verify
 
@@ -48,12 +52,14 @@ If you installed superpowers before native skill discovery, you need to:
 ls -la ~/.agents/skills/superpowers
 ```
 
-You should see a symlink (or junction on Windows) pointing to your superpowers skills directory.
+You should see a symlink or junction pointing to `~/.codex/bdd-superpowers/skills`.
+
+Then restart Codex and ask for brainstorming guidance. The loaded brainstorming skill should mention `Behavior Evaluation` or `Behavior Coverage`.
 
 ## Updating
 
 ```bash
-cd ~/.codex/superpowers && git pull
+cd ~/.codex/bdd-superpowers && git pull
 ```
 
 Skills update instantly through the symlink.
@@ -64,4 +70,4 @@ Skills update instantly through the symlink.
 rm ~/.agents/skills/superpowers
 ```
 
-Optionally delete the clone: `rm -rf ~/.codex/superpowers`.
+Optionally delete the clone: `rm -rf ~/.codex/bdd-superpowers`.

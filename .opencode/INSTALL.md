@@ -1,4 +1,6 @@
-# Installing Superpowers for OpenCode
+# Installing BDD Superpowers for OpenCode
+
+BDD Superpowers is a fork of Superpowers. Install this repository directly; the official marketplaces install upstream Superpowers instead.
 
 ## Prerequisites
 
@@ -6,19 +8,31 @@
 
 ## Installation
 
-Add superpowers to the `plugin` array in your `opencode.json` (global or project-level):
+Add BDD Superpowers to the `plugin` array in your `opencode.json` (global or project-level):
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]
+  "plugin": ["superpowers@git+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness"]
 }
 ```
 
-Restart OpenCode. That's it — the plugin auto-installs and registers all skills.
+After the repository is renamed, use:
 
-Verify by asking: "Tell me about your superpowers"
+```json
+{
+  "plugin": ["superpowers@git+https://github.com/zhexulong/bdd-superpowers.git"]
+}
+```
 
-## Migrating from the old symlink-based install
+Restart OpenCode. The plugin auto-installs and registers all skills.
+
+Verify by asking: "Tell me about your superpowers" and checking that brainstorming mentions `Behavior Evaluation` or `Behavior Coverage`.
+
+## Migrating from upstream Superpowers
+
+Do not enable upstream Superpowers and BDD Superpowers at the same time. They expose the same `superpowers` skill namespace.
+
+If your `opencode.json` contains an upstream `obra/superpowers` entry, replace that entry with the BDD Superpowers entry above.
 
 If you previously installed superpowers using `git clone` and symlinks, remove the old setup:
 
@@ -39,20 +53,22 @@ Then follow the installation steps above.
 
 Use OpenCode's native `skill` tool:
 
-```
+```text
 use skill tool to list skills
 use skill tool to load superpowers/brainstorming
 ```
 
+The skill namespace remains `superpowers` for compatibility.
+
 ## Updating
 
-Superpowers updates automatically when you restart OpenCode.
+BDD Superpowers updates automatically when you restart OpenCode.
 
-To pin a specific version:
+To pin the current branch explicitly:
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git#v5.0.3"]
+  "plugin": ["superpowers@git+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness"]
 }
 ```
 
@@ -64,6 +80,12 @@ To pin a specific version:
 2. Verify the plugin line in your `opencode.json`
 3. Make sure you're running a recent version of OpenCode
 
+### Installed upstream by mistake
+
+1. Search `opencode.json` for `obra/superpowers`
+2. Replace upstream entries with the BDD Superpowers git URL
+3. Restart OpenCode so it refreshes the plugin
+
 ### Skills not found
 
 1. Use `skill` tool to list what's discovered
@@ -72,12 +94,13 @@ To pin a specific version:
 ### Tool mapping
 
 When skills reference Claude Code tools:
-- `TodoWrite` → `todowrite`
-- `Task` with subagents → `@mention` syntax
-- `Skill` tool → OpenCode's native `skill` tool
-- File operations → your native tools
+- `TodoWrite` -> `todowrite`
+- `Task` with subagents -> `@mention` syntax
+- `Skill` tool -> OpenCode's native `skill` tool
+- File operations -> your native tools
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Full documentation: https://github.com/obra/superpowers/blob/main/docs/README.opencode.md
+- This fork: https://github.com/zhexulong/superpowers/tree/feature/bdd-control-harness
+- Planned renamed repository: https://github.com/zhexulong/bdd-superpowers
+- Upstream Superpowers: https://github.com/obra/superpowers
