@@ -100,10 +100,9 @@ digraph brainstorming {
 - Ask after each section whether it looks right so far
 - Cover: architecture, components, data flow, error handling, testing
 - Include a Behavior Evaluation section for non-trivial behavior changes:
-  - User intent
   - Concrete examples
-  - Accept scenarios
-  - Reject scenarios
+  - Expected results
+  - Failure signals
   - Invariants
   - Observable evidence / oracle
   - Correction path if evidence fails
@@ -138,7 +137,7 @@ After writing the spec document, look at it with fresh eyes:
 2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
 3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
 4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
-5. **Behavior evaluation check:** For non-trivial behavior changes, can a reviewer identify concrete examples, reject scenarios, invariants, observable evidence/oracle, and correction paths? If not, add them before planning.
+5. **Behavior evaluation check:** For non-trivial behavior changes, can a reviewer identify concrete examples, expected results, failure signals, invariants, observable evidence/oracle, and correction paths? If not, add them before planning.
 
 Fix any issues inline. No need to re-review — just fix and move on.
 

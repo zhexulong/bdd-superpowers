@@ -62,7 +62,7 @@ This structure informs the task decomposition. Each task should produce self-con
 
 ## Behavior Coverage
 
-If the spec includes Behavior Evaluation, add this section after the header and before the task list. This is a horizontal behavior-control surface for the whole plan, not a field to copy into every implementation task.
+If the spec includes Behavior Evaluation, add this section after the header and before the task list. Behavior Coverage turns behavior scenarios from the spec into reviewable checks for the plan. It helps catch cases where local implementation is correct but the overall behavior or flow drifts.
 
 ```markdown
 ## Behavior Coverage
@@ -84,7 +84,7 @@ If the spec includes Behavior Evaluation, add this section after the header and 
 - Invariant 1: Invariant from the spec that must remain true across tasks.
 ```
 
-A behavior scenario is an acceptance scenario or concrete example turned into a reviewable control point. It is not a task, module boundary, milestone, or approval gate.
+A behavior scenario is an acceptance scenario or concrete example turned into a reviewable control point. It is not a task, module boundary, milestone, approval gate, or replacement for TDD.
 
 Do not require every task to have a behavior scenario. A task only gets a behavior coverage line if it connects to a scenario or invariant:
 
@@ -162,7 +162,7 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
 
-**2. Behavior coverage:** If the spec includes Behavior Evaluation, does the plan include behavior scenarios, observable evidence/oracles, failure signals, correction paths, and any cross-task invariants? Do tasks only reference behavior coverage when they connect to a scenario or invariant?
+**2. Behavior coverage:** If the spec includes Behavior Evaluation, does the plan turn those behavior scenarios into observable evidence/oracles, failure signals, correction paths, and any cross-task invariants? Do tasks only reference behavior coverage when they connect to a scenario or invariant?
 
 **3. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
 

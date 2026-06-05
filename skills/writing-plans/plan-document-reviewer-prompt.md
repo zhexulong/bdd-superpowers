@@ -2,7 +2,7 @@
 
 Use this template when dispatching a plan document reviewer subagent.
 
-**Purpose:** Verify the plan is complete, matches the spec, preserves behavior scenarios, and has proper task decomposition.
+**Purpose:** Verify the plan is complete, matches the spec, preserves behavior scenarios where applicable, and has proper task decomposition.
 
 **Dispatch after:** The complete plan is written.
 
@@ -21,17 +21,17 @@ Task tool (general-purpose):
     |----------|------------------|
     | Completeness | TODOs, placeholders, incomplete tasks, missing steps |
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
-    | Behavior Coverage | If the spec has Behavior Evaluation, the plan has behavior scenarios, observable evidence/oracles, failure signals, correction paths, and cross-task invariants |
+    | Behavior Coverage | If the spec has Behavior Evaluation, the plan turns those behavior scenarios into observable evidence/oracles, failure signals, correction paths, and cross-task invariants |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Behavior Coverage | Tasks reference behavior coverage only when they implement, observe, correct, or preserve a declared scenario/invariant; unrelated tasks are technical-only |
     | Buildability | Could an engineer follow this plan without getting stuck? |
 
     ## Behavior Coverage Guidance
 
-    A behavior scenario is an acceptance scenario or concrete example turned into a reviewable control point. It is not a task, module boundary, milestone, or approval gate.
+    A behavior scenario is an acceptance scenario or concrete example turned into a reviewable control point. It helps catch cases where local implementation is correct but the overall behavior or flow drifts. It is not a task, module boundary, milestone, approval gate, or replacement for TDD.
 
     If the spec includes Behavior Evaluation, the plan should include:
-    - Behavior scenarios derived from concrete examples or acceptance scenarios
+    - Behavior scenarios derived from the spec's concrete examples or acceptance scenarios
     - Observable evidence or oracle for each scenario
     - Failure signal for each scenario
     - Correction path for failed evidence
@@ -45,7 +45,7 @@ Task tool (general-purpose):
     - `preserves Invariant N`
     - `technical-only`
 
-    Do not require every task to have a behavior scenario. Flag tasks that invent user behavior just to avoid `technical-only`.
+    Do not require every task to have a behavior scenario. Flag tasks that invent user behavior just to avoid `technical-only`. Technical-only tasks still need TDD, regression testing, or static verification as appropriate.
 
     ## Calibration
 

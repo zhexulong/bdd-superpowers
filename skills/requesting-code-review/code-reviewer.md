@@ -52,6 +52,7 @@ git diff {BASE_SHA}..{HEAD_SHA}
 - All plan requirements met?
 - Implementation matches spec?
 - If the plan includes Behavior Coverage, declared behavior scenarios still have observable evidence, failure signals, and correction paths?
+- If the plan includes Behavior Coverage, could the implementation pass local tests while the overall behavior or flow still drifts from the scenario?
 - Any task marked `preserves Invariant N` actually preserves the invariant?
 - Any task marked `technical-only` avoided inventing user behavior and still has appropriate TDD, regression, or static verification?
 - No scope creep?
