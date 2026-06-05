@@ -22,6 +22,14 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
 
+If you arrived here from an existing spec or requirements document rather than a freshly approved brainstorming session, do a lightweight behavior boundary check before planning:
+- What concrete example exposes the intended behavior?
+- What expected result, failure signal, invariant, and observable evidence would show the behavior is right or drifting?
+- If the evidence fails, should correction return to the spec, plan, implementation, or human decision?
+- Are you still at the user behavior / architecture-boundary level, or have you prematurely turned implementation machinery into the behavior owner?
+
+If the spec already answers these questions, carry those answers into Behavior Coverage. If it does not, add the missing behavior questions to the plan notes or return to the spec before writing implementation tasks. Do not invent a Behavior Coverage section for purely technical work.
+
 ## File Structure
 
 Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
@@ -84,7 +92,7 @@ If the spec includes Behavior Evaluation, add this section after the header and 
 - Invariant 1: Invariant from the spec that must remain true across tasks.
 ```
 
-A behavior scenario is an acceptance scenario or concrete example turned into a reviewable control point. It is not a task, module boundary, milestone, approval gate, or replacement for TDD.
+A behavior scenario is a concrete example or user-observable flow turned into a reviewable control point. It is not a task, module boundary, milestone, approval gate, or replacement for TDD.
 
 Do not require every task to have a behavior scenario. A task only gets a behavior coverage line if it connects to a scenario or invariant:
 
@@ -167,6 +175,8 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 **3. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
 
 **4. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
+
+**5. Architecture ownership:** Do plan tasks preserve the spec's intended owners instead of turning adapters, caches, fallback paths, eval artifacts, debug scaffolding, fixed file names, or exact choreography into product contract? If a task introduces support machinery, verify it remains an internal implementation aid and does not become a product contract, authority surface, or owner of user-visible behavior.
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
 
