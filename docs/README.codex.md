@@ -47,6 +47,14 @@ Fetch and follow instructions from https://raw.githubusercontent.com/zhexulong/b
 
 3. Restart Codex.
 
+Verify with the smoke-test conversation:
+
+```bash
+codex exec 'Use superpowers:writing-plans. Answer only with three bullets: when does the plan include Behavior Coverage, what does technical-only mean, and how is Behavior Coverage different from TDD? If the loaded skill does not mention Behavior Coverage, say STALE SUPERPOWERS CACHE.'
+```
+
+Check that the loaded `writing-plans` skill explains when `Behavior Coverage` appears, what `technical-only` means, and how it differs from TDD.
+
 4. **For subagent skills** (optional): Skills like `dispatching-parallel-agents` and `subagent-driven-development` require Codex's multi-agent feature. Add to your Codex config:
    ```toml
    [features]
@@ -64,6 +72,12 @@ cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE
 
 ## Migrating from upstream Superpowers
 
+Use a delete-then-install flow:
+
+1. Remove the old `~/.agents/skills/superpowers` link or junction.
+2. Install BDD Superpowers from the git URL above.
+3. Refresh stale cache if the loaded skill text still looks like upstream Superpowers.
+
 If `~/.agents/skills/superpowers` already points to upstream Superpowers, replace it:
 
 ```bash
@@ -72,6 +86,8 @@ ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
 ```
 
 Do not expose both upstream Superpowers and BDD Superpowers under skill discovery at the same time.
+
+If the loaded skill text still looks stale after reinstalling, clear the cache described in [Refreshing Stale Superpowers Caches](cache-refresh.md).
 
 ## How It Works
 

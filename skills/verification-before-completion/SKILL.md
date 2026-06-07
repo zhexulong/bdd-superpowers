@@ -99,6 +99,12 @@ Skip any step = lying, not verifying
 ❌ "Tests pass, phase complete"
 ```
 
+**Behavior Coverage:**
+```
+✅ Re-read Behavior Coverage → Verify listed checks, observations, or failure signals → Report gaps or completion
+❌ "Tests pass, so Behavior Coverage is met"
+```
+
 **Agent delegation:**
 ```
 ✅ Agent reports success → Check VCS diff → Verify changes → Report actual state

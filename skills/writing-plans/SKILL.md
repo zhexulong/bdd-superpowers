@@ -94,6 +94,8 @@ If the spec includes Behavior Evaluation, add this section after the header and 
 
 A behavior scenario is a concrete example or user-observable flow turned into a reviewable control point. It is not a task, module boundary, milestone, approval gate, or replacement for TDD.
 
+When a behavior scenario has an automated check, make it concrete: one behavior, clear expected result, real code or real artifact where possible, exact command, and expected output. If the check would pass immediately without proving the scenario's failure signal, choose a better check.
+
 Do not require every task to have a behavior scenario. A task only gets a behavior coverage line if it connects to a scenario or invariant:
 
 ```markdown

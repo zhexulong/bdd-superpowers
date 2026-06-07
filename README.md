@@ -35,6 +35,32 @@ Finally, code review checks more than local test pass/fail. It looks for cases w
 
 Installation differs by platform. The important rule is: install this fork, not the official Superpowers marketplace package.
 
+When migrating from upstream Superpowers, use a clean delete-and-install flow:
+
+First decide which agent install you are changing: Codex, OpenCode, Claude Code, Cursor, Copilot, Gemini, or another local skill/plugin surface. Many users have more than one installed. Only uninstall and reinstall Superpowers for the selected agent.
+
+1. Delete the old upstream Superpowers entry, symlink, junction, or clone.
+2. Install BDD Superpowers from the git URL below.
+3. Refresh stale caches for that selected agent. See [Refreshing Stale Superpowers Caches](docs/cache-refresh.md).
+4. Run the smoke-test conversation below in the selected agent, or restart it first if that platform requires restart for plugin discovery. Treat the install as stale if the answer does not clearly explain when `Behavior Coverage` appears, what `technical-only` means, and how it differs from TDD.
+
+If you want to hand the migration to an agent, use this one-line instruction:
+
+```text
+Ask me which agent's Superpowers install to replace, then only for that selected agent uninstall upstream Superpowers, install BDD Superpowers from the git URL below, clear stale skill/plugin caches, run the README smoke-test conversation for that agent, or tell me if that platform requires restart first, and treat the install as stale unless `superpowers:writing-plans` clearly explains when `Behavior Coverage` appears, what `technical-only` means, and how it differs from TDD.
+```
+
+Smoke-test prompt:
+
+```text
+Use superpowers:writing-plans. Answer only with three bullets: when does the plan include Behavior Coverage, what does technical-only mean, and how is Behavior Coverage different from TDD? If the loaded skill does not mention Behavior Coverage, say STALE SUPERPOWERS CACHE.
+```
+
+Use the platform's own non-interactive entry point when available:
+
+- OpenCode: `opencode run 'Use superpowers:writing-plans. Answer only with three bullets: when does the plan include Behavior Coverage, what does technical-only mean, and how is Behavior Coverage different from TDD? If the loaded skill does not mention Behavior Coverage, say STALE SUPERPOWERS CACHE.'`
+- Codex: `codex exec 'Use superpowers:writing-plans. Answer only with three bullets: when does the plan include Behavior Coverage, what does technical-only mean, and how is Behavior Coverage different from TDD? If the loaded skill does not mention Behavior Coverage, say STALE SUPERPOWERS CACHE.'`
+
 Until the GitHub repository is renamed, use the current fork URL:
 
 ```text
@@ -67,11 +93,9 @@ After the repo is renamed, switch to:
 }
 ```
 
-Restart OpenCode. The plugin auto-installs and registers all skills.
+Restart OpenCode if needed for plugin discovery. Then run the smoke test above and check that `writing-plans` explains when `Behavior Coverage` appears, what `technical-only` means, and how it differs from TDD.
 
-Verify by asking: "Tell me about your superpowers" and checking that brainstorming mentions `Behavior Evaluation` or `Behavior Coverage`.
-
-If you previously installed official Superpowers, remove or replace the old plugin entry. Do not keep both official Superpowers and BDD Superpowers enabled at the same time; they expose the same skill names.
+If you previously installed official Superpowers, delete the old plugin entry before adding this one. Do not keep both official Superpowers and BDD Superpowers enabled at the same time; they expose the same skill names. If OpenCode or another agent still loads old skill text after the change, clear stale caches using [the cache refresh guide](docs/cache-refresh.md).
 
 ### OpenAI Codex CLI
 
@@ -98,6 +122,8 @@ cd ~/.codex/bdd-superpowers && git pull
 ```
 
 If you already have `~/.agents/skills/superpowers` pointing to official Superpowers, replace that symlink so it points to this fork.
+
+After replacing an old install, clear stale plugin caches if the loaded skill text still looks like upstream Superpowers. See [Refreshing Stale Superpowers Caches](docs/cache-refresh.md).
 
 ### Claude Code, Cursor, Copilot, and Gemini
 
@@ -156,6 +182,7 @@ The agent checks for relevant skills before any task. Mandatory workflows, not s
 Current evidence is intentionally narrow:
 
 - The aligned design/spec eval passes on this fork and fails on upstream `origin/main` for behavior-evaluation requirements.
+- The writing-plans Behavior Coverage smoke eval produces concrete tests/checks from a retained-eval scenario, but also caught an undefined `Scenario 2` task-reference failure. See [Behavior Coverage Writing-Plans Eval](docs/evals/behavior-coverage-writing-plans.md).
 - Mutation and real-document replay checks have not proven broad superiority; they are useful as non-regression and diagnostic checks.
 - The supported claim is not "better at everything." The supported claim is that this fork adds reviewable behavior/control harness requirements that upstream Superpowers does not currently enforce.
 

@@ -26,9 +26,22 @@ After the repository is renamed, use:
 
 Restart OpenCode. The plugin auto-installs and registers all skills.
 
-Verify by asking: "Tell me about your superpowers" and checking that brainstorming mentions `Behavior Evaluation` or `Behavior Coverage`.
+Verify with the smoke-test conversation:
+
+```bash
+opencode run 'Use superpowers:writing-plans. Answer only with three bullets: when does the plan include Behavior Coverage, what does technical-only mean, and how is Behavior Coverage different from TDD? If the loaded skill does not mention Behavior Coverage, say STALE SUPERPOWERS CACHE.'
+```
+
+Check that `writing-plans` explains when `Behavior Coverage` appears, what `technical-only` means, and how it differs from TDD.
 
 ## Migrating from upstream Superpowers
+
+Use a delete-then-install flow:
+
+1. Remove any upstream `obra/superpowers` plugin entry.
+2. Remove any old symlink-based OpenCode install.
+3. Install BDD Superpowers from the git URL above.
+4. Clear stale OpenCode package cache if the loaded skill text still looks like upstream Superpowers.
 
 Do not enable upstream Superpowers and BDD Superpowers at the same time. They expose the same `superpowers` skill namespace.
 
@@ -48,6 +61,8 @@ rm -rf ~/.config/opencode/superpowers
 ```
 
 Then follow the installation steps above.
+
+If the loaded skill text still looks stale after reinstalling, clear the OpenCode package cache described in [docs/cache-refresh.md](../docs/cache-refresh.md).
 
 ## Usage
 
