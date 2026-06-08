@@ -24,11 +24,11 @@ You MUST create a task for each of these items and complete them in order:
 1. **Explore project context** — check files, docs, recent commits
 2. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-4. **Run bounded behavior grill** — pressure-test user behavior, architecture boundaries, examples, reject signals, invariants, and feedback/correction paths without over-questioning
+4. **Check behavior boundaries** — pressure-test user behavior, architecture boundaries, examples, reject signals, invariants, and feedback/correction paths without over-questioning
 5. **Propose 2-3 approaches** — with trade-offs and your recommendation
-6. **Present design** — in sections scaled to their complexity, get user approval after each section
+6. **Present design direction** — summarize the design direction, get user approval before writing the spec
 7. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
-8. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope, and Behavior Evaluation (see below)
+8. **Spec review** — quick inline check, then run the spec reviewer prompt and fix/re-review until approved or human decision is needed
 9. **User reviews written spec** — ask user to review the spec file before proceeding
 10. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
@@ -40,12 +40,12 @@ digraph brainstorming {
     "Visual questions ahead?" [shape=diamond];
     "Offer Visual Companion\n(own message, no other content)" [shape=box];
     "Ask clarifying questions" [shape=box];
-    "Bounded behavior grill" [shape=box];
+    "Check behavior boundaries" [shape=box];
     "Propose 2-3 approaches" [shape=box];
-    "Present design sections" [shape=box];
+    "Present design direction" [shape=box];
     "User approves design?" [shape=diamond];
     "Write design doc" [shape=box];
-    "Spec self-review\n(fix inline)" [shape=box];
+    "Spec review\n(fix inline)" [shape=box];
     "User reviews spec?" [shape=diamond];
     "Invoke writing-plans skill" [shape=doublecircle];
 
@@ -53,14 +53,14 @@ digraph brainstorming {
     "Visual questions ahead?" -> "Offer Visual Companion\n(own message, no other content)" [label="yes"];
     "Visual questions ahead?" -> "Ask clarifying questions" [label="no"];
     "Offer Visual Companion\n(own message, no other content)" -> "Ask clarifying questions";
-    "Ask clarifying questions" -> "Bounded behavior grill";
-    "Bounded behavior grill" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Present design sections";
-    "Present design sections" -> "User approves design?";
-    "User approves design?" -> "Present design sections" [label="no, revise"];
+    "Ask clarifying questions" -> "Check behavior boundaries";
+    "Check behavior boundaries" -> "Propose 2-3 approaches";
+    "Propose 2-3 approaches" -> "Present design direction";
+    "Present design direction" -> "User approves design?";
+    "User approves design?" -> "Present design direction" [label="no, revise"];
     "User approves design?" -> "Write design doc" [label="yes"];
-    "Write design doc" -> "Spec self-review\n(fix inline)";
-    "Spec self-review\n(fix inline)" -> "User reviews spec?";
+    "Write design doc" -> "Spec review\n(fix inline)";
+    "Spec review\n(fix inline)" -> "User reviews spec?";
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
     "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
 }
@@ -82,12 +82,12 @@ digraph brainstorming {
 
 **Exploring approaches:**
 
-- Run a bounded behavior grill before settling on approaches:
+- Check behavior boundaries before settling on approaches:
   - Identify the concrete examples that expose the intended behavior
   - Ask only questions that would change the design route, behavior boundary, reject signal, invariant, or feedback/correction path
   - Prefer answering from code, docs, existing conventions, or references instead of asking the user
   - Stay at user behavior and architecture-boundary level before drilling into implementation details
-  - Do not keep grilling until every technical detail is known; some issues should surface during execution and flow back into the design or plan
+  - Do not keep asking until every technical detail is known; some issues should surface during execution and flow back into the design or plan
 
 - Propose 2-3 different approaches with trade-offs
 - Present options conversationally with your recommendation and reasoning
@@ -95,9 +95,10 @@ digraph brainstorming {
 
 **Presenting the design:**
 
-- Once you believe you understand what you're building, present the design
-- Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
-- Ask after each section whether it looks right so far
+- Once you believe you understand what you're building, present the design direction
+- Keep it short enough for the user to judge the direction before the spec is written
+- Ask whether this is the design they want you to write into the spec
+- For large, ambiguous, or multi-subsystem designs, present sections scaled to their complexity and get approval incrementally
 - Cover: architecture, components, data flow, error handling, testing
 - Include a Behavior Evaluation section for non-trivial behavior changes:
   - Concrete examples
@@ -140,7 +141,11 @@ After writing the spec document, look at it with fresh eyes:
 5. **Behavior evaluation check:** For non-trivial behavior changes, can a reviewer identify concrete examples, expected results, failure signals, invariants, observable evidence/oracle, and correction paths? If not, add them before planning.
 6. **Architecture ownership check:** Does the spec avoid hidden ownership, accidental architecture, over-bound structure, and support/eval/debug mechanisms becoming product contract? If a convenience mechanism is necessary, explain what decision or behavior it owns, why it belongs there, and whether a thinner boundary or explicit contract would be clearer.
 
-Fix any issues inline. No need to re-review — just fix and move on.
+Fix any issues inline.
+
+Then run the spec document reviewer using `skills/brainstorming/spec-document-reviewer-prompt.md`. If your platform supports subagents or reviewer dispatch, dispatch it as a separate reviewer. Otherwise, run the same reviewer prompt inline and state that no separate reviewer was available.
+
+Treat the reviewer as initial filtering only. If the reviewer finds issues, fix them and run the reviewer again. Repeat until the reviewer approves or a human decision is needed. Reviewer approval means "ready for human review"; it does not replace human approval.
 
 **User Review Gate:**
 After the spec review loop passes, ask the user to review the written spec before proceeding:

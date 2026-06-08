@@ -2,7 +2,7 @@
 
 Use this template when dispatching a spec document reviewer subagent.
 
-**Purpose:** Verify the spec is complete, consistent, behavior-grounded where needed, architecturally clear, and ready for implementation planning.
+**Purpose:** Verify the spec is complete, consistent, behavior-grounded where needed, architecturally clear, aligned with the approved design direction if provided, and ready for implementation planning.
 
 **Dispatch after:** Spec document is written to docs/superpowers/specs/
 
@@ -13,6 +13,7 @@ Task tool (general-purpose):
     You are a spec document reviewer. Verify this spec is complete and ready for planning. You are doing initial filtering only; human approval remains required.
 
     **Spec to review:** [SPEC_FILE_PATH]
+    **Approved design direction, if any:** [DESIGN_DIRECTION_TEXT_OR_PATH_OR_NONE]
 
     ## What to Check
 
@@ -20,6 +21,7 @@ Task tool (general-purpose):
     |----------|------------------|
     | Completeness | TODOs, placeholders, "TBD", incomplete sections |
     | Consistency | Internal contradictions, conflicting requirements |
+    | Design Direction | If an approved design direction was provided, the written spec does not drift from it |
     | Clarity | Requirements ambiguous enough to cause someone to build the wrong thing |
     | Scope | Focused enough for a single plan — not covering multiple independent subsystems |
     | Behavior Evaluation | For non-trivial behavior changes, concrete examples, expected results, failure signals, invariants, observable evidence/oracle, and correction paths |
@@ -71,6 +73,8 @@ Task tool (general-purpose):
     Treat missing failure signals, missing oracle/evidence, or missing correction path for non-trivial behavior changes as issues when they would let planning proceed without a way to detect or correct behavioral drift. Do not require full Behavior Evaluation for trivial technical-only changes.
 
     Treat accidental architecture findings as blocking only when they would cause implementation planning to build the wrong owner, preserve unnecessary machinery, or turn support/eval/debug artifacts into product contract. Otherwise list them as recommendations.
+
+    If an approved design direction was provided, treat drift from that direction as an issue when it would cause the user to review or approve a different design than the one they already accepted. Do not create a new design direction in the reviewer; report the drift and ask the main agent to return to the user or revise the spec.
 
     Approve unless there are serious gaps that would lead to a flawed plan. "Approved" means ready for the human to review and decide; it does not replace human approval.
 

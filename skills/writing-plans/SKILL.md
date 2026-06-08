@@ -180,7 +180,11 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **5. Architecture ownership:** Do plan tasks preserve the spec's intended owners instead of turning adapters, caches, fallback paths, eval artifacts, debug scaffolding, fixed file names, or exact choreography into product contract? If a task introduces support machinery, verify it remains an internal implementation aid and does not become a product contract, authority surface, or owner of user-visible behavior.
 
-If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
+If you find issues, fix them inline. If you find a spec requirement with no task, add the task.
+
+Then run the plan document reviewer using `skills/writing-plans/plan-document-reviewer-prompt.md`. If your platform supports subagents or reviewer dispatch, dispatch it as a separate reviewer. Otherwise, run the same reviewer prompt inline and state that no separate reviewer was available.
+
+Treat the reviewer as initial filtering only. If the reviewer finds issues, fix them and run the reviewer again. Repeat until the reviewer approves or a human decision is needed. Fix real issues before offering execution options.
 
 ## Execution Handoff
 
