@@ -178,6 +178,8 @@ Current evidence is intentionally narrow:
 
 BDD Superpowers is forked from [obra/superpowers](https://github.com/obra/superpowers), originally built by Jesse Vincent and the Prime Radiant community.
 
+Special thanks to the [linux.do](https://linux.do/) community for discussion, feedback, and early usage signals that shaped this fork.
+
 This fork keeps the MIT license. See [LICENSE](LICENSE) for details.
 
 ## Contributing
