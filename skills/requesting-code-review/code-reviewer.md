@@ -41,6 +41,10 @@ git diff {BASE_SHA}..{HEAD_SHA}
 - Scalability considerations?
 - Performance implications?
 - Security concerns?
+- Any hidden ownership or accidental architecture introduced?
+- Did convenience glue, caches, adapters, wrappers, fallback paths, debug artifacts, or eval artifacts become product contract or runtime authority?
+- Did implementation support code start controlling method, answer shape, read order, routing, policy, or truth ownership that should live in an explicit contract, schema, spec, skill, or authority doc?
+- If such a mechanism exists, should it be kept as-is, thinned, moved behind a private/eval-only boundary, relocated to an explicit contract/spec layer, or removed?
 
 **Testing:**
 - Tests actually test logic (not mocks)?

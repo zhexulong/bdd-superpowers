@@ -20,16 +20,18 @@ Once the design is written, the spec can include a `Behavior Evaluation` section
 
 After design approval, the writing-plans skill still produces a Superpowers-style implementation plan with concrete tasks, file paths, tests, and verification. When the spec contains Behavior Evaluation, the plan also includes `Behavior Coverage`: a short horizontal mapping from scenarios and invariants to implementation tasks and evidence. Technical-only tasks remain valid; the goal is not to force fake BDD onto every local slice.
 
-Finally, code review checks more than local test pass/fail. It looks for cases where implementation details are correct but the behavior pipeline is wrong, incomplete, or no longer tied to the user-visible outcome.
+Finally, review checks more than local test pass/fail. BDD Superpowers adds architecture ownership checks to document review and a shorter version to code review. The reviewer looks for cases where local implementation is correct but the behavior pipeline is wrong, and for cases where convenience glue, caches, wrappers, fallback paths, debug artifacts, or eval artifacts have quietly become product contract or runtime authority.
+
+This matters because many agent mistakes are not "bad code" in isolation. They are wrong ownership: a temporary support mechanism starts deciding routing, truth, method, answer shape, read order, or policy. The reviewer asks what higher-level behavior a mechanism now controls, whether that ownership belongs there, and whether it should be thinned, moved behind a private/eval-only boundary, relocated to an explicit contract/spec layer, or removed.
 
 ## What differs from upstream Superpowers
 
 - **Bounded behavior grill in brainstorming** - adds targeted pressure-testing before the design is finalized, without asking dozens of low-value questions up front.
 - **Behavior Evaluation in specs** - captures concrete examples, expected results, failure signals, invariants, observable evidence, and correction paths for non-trivial behavior changes.
 - **Behavior Coverage in plans** - connects the spec's behavior scenarios to plan tasks and verification evidence, while allowing unrelated implementation steps to stay `technical-only`.
-- **Design document self-review** - the spec reviewer now checks for missing behavior evidence, ambiguous failure signals, weak invariants, and unclear correction paths.
-- **Plan document review** - the plan reviewer rejects fake per-task behavior coverage and checks whether horizontal scenarios are actually carried through the plan.
-- **Code review reinforcement** - review prompts look for flow-level drift: local tests passing while the intended behavior or pipeline is not actually preserved.
+- **Design document self-review** - the spec reviewer now checks for missing behavior evidence, ambiguous failure signals, weak invariants, unclear correction paths, hidden ownership, accidental architecture, and support mechanisms becoming product contract.
+- **Plan document review** - the plan reviewer rejects fake per-task behavior coverage, checks whether horizontal scenarios are actually carried through the plan, and blocks plans that make support/eval/debug machinery into product contract.
+- **Code review reinforcement** - code review checks flow-level drift and hidden ownership: local tests passing while the intended behavior or pipeline is not preserved, or implementation glue quietly taking over truth, method, routing, or policy ownership.
 
 ## Installation
 
