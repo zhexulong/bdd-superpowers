@@ -9,12 +9,6 @@ BDD Superpowers is a fork of Superpowers. It keeps the original skill workflow a
 Tell Codex:
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/zhexulong/superpowers/refs/heads/feature/bdd-control-harness/.codex/INSTALL.md
-```
-
-After the repository is renamed:
-
-```text
 Fetch and follow instructions from https://raw.githubusercontent.com/zhexulong/bdd-superpowers/refs/heads/main/.codex/INSTALL.md
 ```
 
@@ -28,11 +22,6 @@ Fetch and follow instructions from https://raw.githubusercontent.com/zhexulong/b
 ### Steps
 
 1. Clone the repo:
-   ```bash
-   git clone --branch feature/bdd-control-harness https://github.com/zhexulong/superpowers.git ~/.codex/bdd-superpowers
-   ```
-
-   After the repository is renamed:
    ```bash
    git clone https://github.com/zhexulong/bdd-superpowers.git ~/.codex/bdd-superpowers
    ```
@@ -171,6 +160,5 @@ Junctions normally work without special permissions. If creation fails, try runn
 
 ## Getting Help
 
-- This fork: https://github.com/zhexulong/superpowers/tree/feature/bdd-control-harness
-- Planned renamed repository: https://github.com/zhexulong/bdd-superpowers
+- BDD Superpowers: https://github.com/zhexulong/bdd-superpowers
 - Upstream Superpowers: https://github.com/obra/superpowers

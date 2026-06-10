@@ -10,14 +10,6 @@ Add BDD Superpowers to the `plugin` array in your `opencode.json` (global or pro
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness"]
-}
-```
-
-After the repository is renamed, use:
-
-```json
-{
   "plugin": ["superpowers@git+https://github.com/zhexulong/bdd-superpowers.git"]
 }
 ```
@@ -117,7 +109,7 @@ To pin the current branch explicitly:
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness"]
+  "plugin": ["superpowers@git+https://github.com/zhexulong/bdd-superpowers.git"]
 }
 ```
 
@@ -164,7 +156,6 @@ Skills written for Claude Code are adapted for OpenCode:
 
 ## Getting Help
 
-- This fork: https://github.com/zhexulong/superpowers/tree/feature/bdd-control-harness
-- Planned renamed repository: https://github.com/zhexulong/bdd-superpowers
+- BDD Superpowers: https://github.com/zhexulong/bdd-superpowers
 - Upstream Superpowers: https://github.com/obra/superpowers
 - OpenCode docs: https://opencode.ai/docs/

@@ -61,13 +61,7 @@ Use the platform's own non-interactive entry point when available:
 - OpenCode: `opencode run 'Use superpowers:writing-plans. Answer only with three bullets: when does the plan include Behavior Coverage, what does technical-only mean, and how is Behavior Coverage different from TDD? If the loaded skill does not mention Behavior Coverage, say STALE SUPERPOWERS CACHE.'`
 - Codex: `codex exec 'Use superpowers:writing-plans. Answer only with three bullets: when does the plan include Behavior Coverage, what does technical-only mean, and how is Behavior Coverage different from TDD? If the loaded skill does not mention Behavior Coverage, say STALE SUPERPOWERS CACHE.'`
 
-Until the GitHub repository is renamed, use the current fork URL:
-
-```text
-https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness
-```
-
-After the repository is renamed, use:
+Use the BDD Superpowers repository:
 
 ```text
 https://github.com/zhexulong/bdd-superpowers.git
@@ -78,14 +72,6 @@ The internal skill namespace currently remains `superpowers:*` for compatibility
 ### OpenCode
 
 Add BDD Superpowers to the `plugin` array in your `opencode.json`:
-
-```json
-{
-  "plugin": ["superpowers@git+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness"]
-}
-```
-
-After the repo is renamed, switch to:
 
 ```json
 {
@@ -100,14 +86,6 @@ If you previously installed official Superpowers, delete the old plugin entry be
 ### OpenAI Codex CLI
 
 Clone this fork and symlink its skills into Codex native skill discovery:
-
-```bash
-git clone --branch feature/bdd-control-harness https://github.com/zhexulong/superpowers.git ~/.codex/bdd-superpowers
-mkdir -p ~/.agents/skills
-ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
-```
-
-After the repo is renamed:
 
 ```bash
 git clone https://github.com/zhexulong/bdd-superpowers.git ~/.codex/bdd-superpowers
@@ -213,5 +191,4 @@ Use the same discipline as Superpowers itself:
 ## Community and Issues
 
 - Upstream Superpowers: https://github.com/obra/superpowers
-- This fork: https://github.com/zhexulong/superpowers/tree/feature/bdd-control-harness
-- Planned renamed repository: https://github.com/zhexulong/bdd-superpowers
+- BDD Superpowers: https://github.com/zhexulong/bdd-superpowers

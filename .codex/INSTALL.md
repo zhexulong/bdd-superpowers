@@ -11,11 +11,6 @@ Enable BDD Superpowers skills in Codex via native skill discovery. Clone this fo
 
 1. **Clone the BDD Superpowers repository:**
    ```bash
-   git clone --branch feature/bdd-control-harness https://github.com/zhexulong/superpowers.git ~/.codex/bdd-superpowers
-   ```
-
-   After the repository is renamed, use:
-   ```bash
    git clone https://github.com/zhexulong/bdd-superpowers.git ~/.codex/bdd-superpowers
    ```
 

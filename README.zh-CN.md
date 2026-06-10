@@ -63,13 +63,7 @@ Use superpowers:writing-plans. Answer only with three bullets: when does the pla
 
 缓存刷新说明见 [Refreshing Stale Superpowers Caches](docs/cache-refresh.md)。
 
-GitHub 仓库重命名前，使用当前 fork URL：
-
-```text
-https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness
-```
-
-仓库重命名后，使用：
+使用 BDD Superpowers 仓库：
 
 ```text
 https://github.com/zhexulong/bdd-superpowers.git
@@ -80,14 +74,6 @@ https://github.com/zhexulong/bdd-superpowers.git
 ### OpenCode
 
 在你的 `opencode.json` 的 `plugin` 数组中加入 BDD Superpowers：
-
-```json
-{
-  "plugin": ["superpowers@git+https://github.com/zhexulong/superpowers.git#feature/bdd-control-harness"]
-}
-```
-
-仓库重命名后改成：
 
 ```json
 {
@@ -102,14 +88,6 @@ https://github.com/zhexulong/bdd-superpowers.git
 ### OpenAI Codex CLI
 
 clone 这个 fork，并把 skills 目录 symlink 到 Codex native skill discovery：
-
-```bash
-git clone --branch feature/bdd-control-harness https://github.com/zhexulong/superpowers.git ~/.codex/bdd-superpowers
-mkdir -p ~/.agents/skills
-ln -s ~/.codex/bdd-superpowers/skills ~/.agents/skills/superpowers
-```
-
-仓库重命名后：
 
 ```bash
 git clone https://github.com/zhexulong/bdd-superpowers.git ~/.codex/bdd-superpowers
@@ -215,5 +193,4 @@ BDD Superpowers fork 自 [obra/superpowers](https://github.com/obra/superpowers)
 ## Community and Issues
 
 - 上游 Superpowers: https://github.com/obra/superpowers
-- 当前 fork: https://github.com/zhexulong/superpowers/tree/feature/bdd-control-harness
-- 计划重命名后的仓库: https://github.com/zhexulong/bdd-superpowers
+- BDD Superpowers: https://github.com/zhexulong/bdd-superpowers
