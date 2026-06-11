@@ -180,6 +180,8 @@ BDD Superpowers is forked from [obra/superpowers](https://github.com/obra/superp
 
 Special thanks to the [linux.do](https://linux.do/) community for discussion, feedback, and early usage signals that shaped this fork.
 
+Special thanks to [user71](https://linux.do/u/user71) for contributing to the BDD approach.
+
 This fork keeps the MIT license. See [LICENSE](LICENSE) for details.
 
 ## Contributing

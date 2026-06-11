@@ -182,6 +182,8 @@ BDD Superpowers fork 自 [obra/superpowers](https://github.com/obra/superpowers)
 
 特别鸣谢 [linux.do](https://linux.do/) 社区的讨论、反馈和早期使用信号，这些内容推动了这个 fork 的形成。
 
+特别致谢 [user71](https://linux.do/u/user71) 对 BDD 思路的贡献。
+
 本 fork 保持 MIT license。详见 [LICENSE](LICENSE)。
 
 ## Contributing
