@@ -16,7 +16,8 @@ Add BDD Superpowers to the `plugin` array in your `opencode.json` (global or pro
 }
 ```
 
-Restart OpenCode. The plugin auto-installs and registers all skills.
+Restart OpenCode. The plugin installs through OpenCode's plugin manager and
+registers all skills.
 
 Verify with the smoke-test conversation:
 
@@ -38,6 +39,11 @@ Use a delete-then-install flow:
 Do not enable upstream Superpowers and BDD Superpowers at the same time. They expose the same `superpowers` skill namespace.
 
 If your `opencode.json` contains an upstream `obra/superpowers` entry, replace that entry with the BDD Superpowers entry above.
+
+OpenCode uses its own plugin install. If you also use Claude Code, Codex, or
+another harness, install Superpowers separately for each one.
+
+## Migrating from the old symlink-based install
 
 If you previously installed superpowers using `git clone` and symlinks, remove the old setup:
 
@@ -62,14 +68,17 @@ Use OpenCode's native `skill` tool:
 
 ```text
 use skill tool to list skills
-use skill tool to load superpowers/brainstorming
+use skill tool to load brainstorming
 ```
 
 The skill namespace remains `superpowers` for compatibility.
 
 ## Updating
 
-BDD Superpowers updates automatically when you restart OpenCode.
+OpenCode installs Superpowers through a git-backed package spec. Some OpenCode
+and Bun versions pin that resolved git dependency in a lockfile or cache, so a
+restart may not pick up the newest Superpowers commit. If updates do not appear,
+clear OpenCode's package cache or reinstall the plugin.
 
 To pin the current branch explicitly:
 
@@ -91,7 +100,27 @@ To pin the current branch explicitly:
 
 1. Search `opencode.json` for `obra/superpowers`
 2. Replace upstream entries with the BDD Superpowers git URL
-3. Restart OpenCode so it refreshes the plugin
+3. Clear stale OpenCode package cache if the loaded skill text still looks like upstream Superpowers
+
+### Windows install issues
+
+Some Windows OpenCode builds have upstream installer issues with git-backed
+plugin specs, including cache paths for `git+https` URLs and Bun not finding
+`git.exe` even when it works in a normal terminal. If OpenCode cannot install
+the plugin, try installing with system npm and pointing OpenCode at the local
+package:
+
+```powershell
+npm install superpowers@git+https://github.com/zhexulong/bdd-superpowers.git --prefix "$HOME\.config\opencode"
+```
+
+Then use the installed package path in `opencode.json`:
+
+```json
+{
+  "plugin": ["~/.config/opencode/node_modules/superpowers"]
+}
+```
 
 ### Skills not found
 
@@ -100,11 +129,16 @@ To pin the current branch explicitly:
 
 ### Tool mapping
 
-When skills reference Claude Code tools:
-- `TodoWrite` -> `todowrite`
-- `Task` with subagents -> `@mention` syntax
-- `Skill` tool -> OpenCode's native `skill` tool
-- File operations -> your native tools
+Skills speak in actions ("create a todo", "dispatch a subagent", "read a file"). On OpenCode these resolve to:
+
+- "Create a todo" / "mark complete in todo list" → `todowrite`
+- `Subagent (general-purpose):` template → `task` tool with `subagent_type: "general"` (or `"explore"` for codebase exploration)
+- "Invoke a skill" → OpenCode's native `skill` tool
+- "Read a file" → `read`
+- "Create a file" / "edit a file" / "delete a file" → `apply_patch`
+- "Run a shell command" → `bash`
+- "Search file contents" / "find files by name" → `grep`, `glob`
+- "Fetch a URL" → `webfetch`
 
 ## Getting Help
 

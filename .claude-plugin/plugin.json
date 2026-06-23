@@ -1,7 +1,7 @@
 {
   "name": "superpowers",
   "description": "Superpowers fork with TDD, design review, Behavior Evaluation, and Behavior Coverage",
-  "version": "5.0.7",
+  "version": "6.0.3",
   "author": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
